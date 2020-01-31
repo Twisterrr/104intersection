@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2019
+## 104intersection
+## File description:
+## Intersection, project of maths. 
+##
+
+##Including library.
+import math
+import sys
+
+##Implementation of the help menu.
+def usage():
+    print("USAGE")
+    print("   ./104intersection opt xp yp zp xv yv zv p\n")
+    print("DESCRIPTION")
+    print("   opt             surface option: 1 for a sphere, 2 for a cylinder, 3 for a cone")
+    print("   (xp, yp, zp)    coordinates of a point by which the light ray passes through")
+    print("   (xv, yv, zv)    coordinates of a vector parallel to the light ray")
+    print("   p               parameter: radius of the sphere, radius of the cylinder, or")
+    print("                   angle formed by the cone and the Z-axis")
+
+##Error condition.
+len = len(sys.argv)
+if (len == 1):
+    print("No arguments")
+    sys.exit(84)
+if (len == 2):
+    if (sys.argv[1] == "-h"):
+        usage()
+        sys.exit(84)
+if (len < 9):
+    print("not enough arguments")
+    sys.exit(84)
+if (len > 9):
+    print("too many arguments")
+    sys.exit(84)
+
+##Circle.
+def circle_intersection():
+    xp = int(sys.argv[2])
+    yp = int(sys.argv[3])
+    zp = int(sys.argv[4])
+    xv = int(sys.argv[5])
+    yv = int(sys.argv[6])
+    zv = int(sys.argv[7])
+    p = int(sys.argv[8])
+
+    if (p <= 0 or p >= 360):
+        print("Radius can't be inferior to 0 or superior to 360°")
+        sys.exit(84)
+
+    print("Sphere of radius " + "%.0f" % p)
+    print("Line passing through the point (" + "%.0f" % xp + ", " + "%.0f" % yp + ", " + "%.0f" % zp + ") and parallel to the vector ("+ "%.0f" % xv + ", " + "%.0f" % yv + ", " + "%.0f" % zv + ")")
+
+    a = math.pow(xv,2) + math.pow(yv,2) + math.pow(zv,2)
+    b = 2 * xp * xv + 2 * yp * yv + 2 *zp * zv
+    c = math.pow(xp,2) + math.pow(yp,2) + math.pow(zp,2) - math.pow(p,2) 
+    discri = math.pow(b,2) - 4 * a * c
+
+    if (discri == 0):
+        print("1 intersection point:")
+        t = (-float(b))/(2 * float(a))
+        x = xv * t + xp
+        y = yv * t + yp
+        z = zv * t + zp
+        print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+    
+    if (discri > 0):
+        x1 = (float(-b) - float(math.sqrt(discri)))/(2 * float(a))
+        x2 = (float(-b) + float(math.sqrt(discri)))/(2 * float(a))
+        x = xv * x1 + xp
+        y = yv * x1 + yp
+        z = zv * x1 + zp
+        a = xv * x2 + xp
+        b = yv * x2 + yp
+        c = zv * x2 + zp
+        print("2 intersection points:")
+        print("(" + "%.3f" % a + ", " + "%.3f" % b + ", " + "%.3f" % c + ")")
+        print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+    
+    if (discri < 0):
+        print("No intersection point.")
+
+##Cylinder.
+def cylinder_intersection():
+    xp = int(sys.argv[2])
+    yp = int(sys.argv[3])
+    zp = int(sys.argv[4])
+    xv = int(sys.argv[5])
+    yv = int(sys.argv[6])
+    zv = int(sys.argv[7])
+    p = int(sys.argv[8])
+
+    if (p <= 0 or p >= 360):
+        print("Radius can't be inferior to 0 or superior to 360°")
+        sys.exit(84)
+
+    print("Cylinder of radius " + "%.0f" % p)
+    print("Line passing through the point (" + "%.0f" % xp + ", " + "%.0f" % yp + ", " + "%.0f" % zp + ") and parallel to the vector ("+ "%.0f" % xv + ", " + "%.0f" % yv + ", " + "%.0f" % zv + ")")
+
+    a = math.pow(xv,2) + math.pow(yv,2)
+    b = 2 * xp * xv + 2 * yp * yv
+    c = math.pow(xp,2) + math.pow(yp,2) - math.pow(p,2)
+    discri = math.pow(b,2) - 4 * a * c
+
+    if (discri == 0):
+        if ((2 * float(a)) != 0):
+            t = (-float(b))/(2 * float(a))
+            x = xv * t + xp
+            y = yv * t + yp
+            z = zv * t + zp
+            print("1 intersection point:")
+            print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+        else:
+            print("There is an infinite number of intersection points.")
+    
+    if (discri > 0):
+        x1 = (float(-b) - float(math.sqrt(discri)))/(2 * float(a))
+        x2 = (float(-b) + float(math.sqrt(discri)))/(2 * float(a))
+        x = xv * x1 + xp
+        y = yv * x1 + yp
+        z = zv * x1 + zp
+        a = xv * x2 + xp
+        b = yv * x2 + yp
+        c = zv * x2 + zp
+        print("2 intersection points:")
+        print("(" + "%.3f" % a + ", " + "%.3f" % b + ", " + "%.3f" % c + ")")
+        print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+    
+    if (discri < 0):
+        print("No intersection point.")
+
+##Cone.
+def cone_intersection():
+    xp = int(sys.argv[2])
+    yp = int(sys.argv[3])
+    zp = int(sys.argv[4])
+    xv = int(sys.argv[5])
+    yv = int(sys.argv[6])
+    zv = int(sys.argv[7])
+    p = int(sys.argv[8])
+
+    if (p <= 0 or p >= 180):
+        print("Angle can't be inferior to 0 or superior to 180°")
+        sys.exit(84)
+
+    print("Cone with a", p, "degree angle")
+    print("Line passing through the point (" + "%.0f" % xp + ", " + "%.0f" % yp + ", " + "%.0f" % zp + ") and parallel to the vector ("+ "%.0f" % xv + ", " + "%.0f" % yv + ", " + "%.0f" % zv + ")")
+    
+    p = math.radians(p)
+    a = math.pow(xv, 2) + math.pow(yv, 2) - math.pov(zv * math.tan(p), 2)
+    b = (2 * xp  * xv) + (2 * yp * yv) - (2 * zp * zv) * math.pow(math.tan(p), 2)
+    c = (math.pow(xp, 2) + math.pow(yp, 2) - math.pow(zp * math.tan(p), 2))
+    discri = math.pow(b, 2) - (4 * a * c)
+
+    if (discri == 0):
+        x1 = -b / (2 * a)
+        x = xp + x1 * xv
+        y = yp + x1 * yv
+        z = zp + x1 * zv
+        print("1 intersection point:")
+        print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+
+    if (discri > 0):
+        x1 = (-b - math.sqrt(discri))/(2 * a)
+        x2 = (-b + math.sqrt(discri))/(2 * a)
+        x = xp * x1 + xv
+        y = yp * x1 + yv
+        z = zp * x1 + zv
+        a = xp * x2 + xv
+        b = yp * x2 + yv
+        c = zp * x2 + zv
+        print("2 intersection points:")
+        print("(" + "%.3f" % a + ", " + "%.3f" % b + ", " + "%.3f" % c + ")")
+        print("(" + "%.3f" % x + ", " + "%.3f" % y + ", " + "%.3f" % z + ")")
+    
+    if (discri < 0):
+        print("No intersection point.")
+
+##Main function.
+def main():
+    if (sys.argv[1] == '1'):
+        circle_intersection()
+    elif (sys.argv[1] == '2') :
+        cylinder_intersection()
+    elif (sys.argv[1] == '3'):
+        cone_intersection()
+    else:
+        exit(84)
+
+try :
+    if __name__ == "__main__":
+        main()
+        
+except :
+    exit (84)
